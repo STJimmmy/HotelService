@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Hotel {
-    List<Room> rooms = new LinkedList<>();
+   private List<Room> rooms = new LinkedList<>();
 
-    public Hotel(List<Room> rooms) {
+    public Hotel() {
         rooms.add(new Room(1,1, false, false));
         rooms.add(new Room(2,1, false, false));
         rooms.add(new Room(3,1, true, false));
@@ -22,7 +22,11 @@ public class Hotel {
         rooms.add(new Room(13,3, true, true));
         rooms.add(new Room(14,3, true, true));
         rooms.add(new Room(15,3, true, true));
+        rooms.add(new Room(16,3, true, true));
+    }
 
+    public List<Room> getRooms() {
+        return rooms;
     }
 
 

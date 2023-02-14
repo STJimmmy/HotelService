@@ -1,6 +1,7 @@
 package HotelRooms;
 
 public class Room {
+    //todo set to private and use getter/setters and custom methods
     public int roomNo;
     public int capacity;
     public boolean isThereBathRoom;

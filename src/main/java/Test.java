@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class Test {
 
     List<Room> rooms = new LinkedList<>();// not sure if it`s done correctly but i found no other way around
-    Hotel myHotel = new Hotel(rooms);
+    Hotel myHotel = new Hotel();
 
     public static void main(String[] args) {
 

@@ -3,85 +3,91 @@ package HotelRooms;
 
 import UserMenu.UserSubMenu;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class HotelService {
 
 
-    private static List<Room> rooms = new LinkedList<>();// not sure if it`s done correctly but i found no other way around
-    private static Hotel myHotel = new Hotel(rooms);
+    private final List<Room> rooms;
+    private final Hotel hotel = new Hotel();
+    public HotelService() {
+        System.out.println("create HotelService");
+        rooms = hotel.getRooms();
+    }
 
     public void displayAllRooms() {
-
-        for (Room r : rooms
-        ) {
-            System.out.println("Room Number: " + r.roomNo +
-                    ", Capacity: " + r.capacity +
-                    ", BathRoom: " + booleanTranslate(r.isThereBathRoom) +
-                    ", Vacant: " + booleanTranslate(r.isVacant));
+        //iter
+        for (Room room : rooms) {
+            System.out.println("Room Number: " + room.roomNo +
+                    ", Capacity: " + room.capacity +
+                    ", BathRoom: " + booleanTranslate(room.isThereBathRoom) +
+                    ", Vacant: " + booleanTranslate(room.isVacant));
         }
     }
 
     public void displayVacantRooms() {
-        List<Room> vacantRooms = rooms.stream()
-                .filter(room -> room.isVacant == true)
+    /*    List<Room> collect = rooms.stream()
                 .collect(Collectors.toList());
-        for (Room r : vacantRooms
-        ) {
-            System.out.println("Room Number: " + r.roomNo +
-                    ", Capacity: " + r.capacity +
-                    ", BathRoom: " + booleanTranslate(r.isThereBathRoom) +
-                    ", Vacant: " + booleanTranslate(r.isVacant));
-        }
+
+        List<Room> myList = new ArrayList<>(collect);*/
+
+        rooms.stream()
+                .filter( room -> room.isVacant == true)
+                .forEach(room ->  System.out.println("Room Number: " + room.roomNo +
+                        ", Capacity: " + room.capacity +
+                        ", BathRoom: " + booleanTranslate(room.isThereBathRoom) +
+                        ", Vacant: " + booleanTranslate(room.isVacant)));
     }
 
 
-    public static String booleanTranslate(boolean value) {
-        String result;
+    public String booleanTranslate(boolean value) {
+     /*   String result;
         if (value) {
             result = "Y";
         } else {
             result = "N";
         }
-        return result;
+        return result;*/
+        return value ? "Y" : "N";
     }
 
     public Room selectRoom(int input) {
-        List<Room> streamRoom = rooms.stream()
+        return rooms.stream()
                 .filter(room -> room.roomNo == input)
-                .collect(Collectors.toList());
-        return streamRoom.get(0);
-
+                .findFirst()
+                .orElse(null);
     }
 
-    public void roomCheckin(Room selectedRoom, int actionType) {
-        UserSubMenu userSubMenu = new UserSubMenu();
+    public void roomCheckin(Room selectedRoom) {
         if (isRoomVacant(selectedRoom) == true) {
             System.out.println("Room " + selectedRoom.roomNo + " reserved");
             selectedRoom.setVacant(false);
-userSubMenu.run(actionType);
         } else {
             System.out.println("This room already has tenants, please choose another one");
-
         }
     }
 
-    public void roomCheckout (Room selectedRoom, int actionType) {
-        UserSubMenu userSubMenu = new UserSubMenu();
+    public void roomCheckout(Room selectedRoom, int actionType) {
+        UserSubMenu userSubMenu = new UserSubMenu(this);
         if (isRoomVacant(selectedRoom) == false) {
             System.out.println("Room " + selectedRoom.roomNo + " released");
             selectedRoom.setVacant(true);
             userSubMenu.run(actionType);
         } else {
             System.out.println("This room is already vacant, going back to main menu");
-
         }
     }
 
     private boolean isRoomVacant(Room selectedRoom) {
         return selectedRoom.isVacant;
+    }
+
+    public int getHotelSize() {
+        return rooms.size();
     }
 
 }
