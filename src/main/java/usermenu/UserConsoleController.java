@@ -39,7 +39,8 @@ public class UserConsoleController {
                 int input = ConsoleInput.getUserInput();
                 processUserSelection(input);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println(INPUTERRORMESSAGE);
             }
         }
     }

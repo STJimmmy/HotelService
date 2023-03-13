@@ -4,6 +4,9 @@ import guest.Guest;
 import hotelrooms.HotelService;
 import hotelrooms.HotelServiceException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -26,8 +29,9 @@ public class RegisterConsoleController {
             Integer roomNr = getRoomNr();
             if (roomNr == null) return;
             hotelService.validateRoomNumber(roomNr);
-            List<Guest> guests = prepareGuests();
-            hotelService.register(roomNr, guests);
+            Guest guest = prepareGuest();
+            //List<Guest> guests = prepareGuests();
+            //hotelService.register(roomNr, guests);
             System.out.println("Room " + roomNr + " reserved");
         } catch (HotelServiceException e) {
             System.out.println(e.getMessage());
@@ -53,7 +57,7 @@ public class RegisterConsoleController {
             System.out.println("Do you want to invite second guest?");
             addNext = getYesOrNoInput();
         } while (addNext);
-      RegisterConsoleController.method();
+        RegisterConsoleController.method();
         return guests;
     }
 
@@ -63,7 +67,7 @@ public class RegisterConsoleController {
 
     private boolean getYesOrNoInput() {
         String line = new Scanner(System.in).nextLine();
-        if ( line.equalsIgnoreCase("yes") || line.equalsIgnoreCase("y")) {
+        if (line.equalsIgnoreCase("yes") || line.equalsIgnoreCase("y")) {
             return true;
         } else if (line.equalsIgnoreCase("no") || line.equalsIgnoreCase("n")) {
             return false;
@@ -76,11 +80,25 @@ public class RegisterConsoleController {
     private Guest prepareGuest() {
         //form
         //todo not yet implemented
-
-        return new Guest(null,"","");
+prepareGuestBirthday();
+        return new Guest(null, "", "");
     }
 
-     void unregister() {
+    private LocalDate prepareGuestBirthday() {
+        System.out.println("Please input your guests date of birth in a dd.mm.yyyy format or 0 to go back to the prev menu");
+        LocalDate birthday = ConsoleInput.getUserInputDate();
+        return birthday;
+    }
+    private String prepareGuestLastName(){
+        String lName;
+        return lName;
+    }
+
+    private String prepareGuestFirstName(){
+        String fName;
+        return fName;
+    }
+    void unregister() {
         System.out.println(MESSAGE_REGISTER);
         try {
             Integer roomNumber = getRoomNr();
@@ -92,5 +110,6 @@ public class RegisterConsoleController {
             unregister();
         }
     }
+
 
 }
