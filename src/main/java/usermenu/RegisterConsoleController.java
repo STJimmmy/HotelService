@@ -29,11 +29,17 @@ public class RegisterConsoleController {
             Integer roomNr = getRoomNr();
             if (roomNr == null) return;
             hotelService.validateRoomNumber(roomNr);
-            Guest guest = prepareGuest();
-            //List<Guest> guests = prepareGuests();
-            //hotelService.register(roomNr, guests);
+
+            List<Guest> guests = prepareGuests(roomNr);
+            if (guests.isEmpty()) {
+                return;
+            }
+
+            hotelService.register(roomNr, guests);
+
             System.out.println("Room " + roomNr + " reserved");
         } catch (HotelServiceException e) {
+
             System.out.println(e.getMessage());
             register();
         }
@@ -48,20 +54,114 @@ public class RegisterConsoleController {
         return userInput;
     }
 
-    private List<Guest> prepareGuests() {
+    private List<Guest> prepareGuests(int roomNumber) { // if the 2nd customers input is cancelled, the program should
+        // check with the user whether he/she wants to register only one customer; if yes - register, if no - ask the user to input additional guests data again
         List<Guest> guests = new ArrayList<>();
-        boolean addNext;
-        do {
-            Guest guest = prepareGuest();
+
+        Guest guest;
+        Guest additionalGuest;
+
+        guest = prepareGuest();
+
+        if (guest == null) {
+            System.out.println("Customer data input cancelled, returning to main menu");
+            return guests;
+        }
+
+        if (guests.size() + 1 < hotelService.getRoomCapacity(roomNumber)) {
             guests.add(guest);
-            System.out.println("Do you want to invite second guest?");
-            addNext = getYesOrNoInput();
-        } while (addNext);
-        RegisterConsoleController.method();
+            System.out.println("Do you want to invite another guest (Y/N)?");
+            if(getYesOrNoInput()){
+                additionalGuest = prepareGuest();
+                guests.add(additionalGuest);
+                return guests;
+            }
+
+
+        } else {
+            System.out.println("Maximum capacity reached");
+            guests.add(guest);
+
+            return guests;
+        }
+
+
         return guests;
     }
 
-    public static void method() {
+    private Guest prepareGuest() {
+
+
+        LocalDate birthday = prepareGuestBirthday();
+        if (birthday == null) return null;
+        String lName = prepareGuestLastName().toUpperCase().trim();
+        if (lName == null) return null;
+
+        String fName = prepareGuestFirstName().toUpperCase().trim();
+        if (fName == null) return null;
+
+        return new Guest(birthday, lName, fName);
+    }
+
+    private Guest prepareAdditionalGuest() {
+        LocalDate birthday = prepareGuestBirthday();
+        if (birthday == null) return null;
+        String lName = prepareGuestLastName().toUpperCase().trim();
+        if (lName == null) return null;
+
+        String fName = prepareGuestFirstName().toUpperCase().trim();
+        if (fName == null) return null;
+
+        return new Guest(birthday, lName, fName);
+    }
+
+    private LocalDate prepareGuestBirthday() {
+        System.out.println("Please input customer`s birthday in the dd.mm.yyyy format or 0 to go back to the main menu");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String birthday = ConsoleInput.getUserInputDate();
+        if (birthday.equals("0")) {
+            return null;
+        } else {
+            try {
+                LocalDate birthdayLocalDate = LocalDate.parse(birthday, formatter);
+                return birthdayLocalDate;
+            } catch (Exception e) {
+                System.out.println("Please input the birthday in the correct format or 0 to go back to the main menu");
+                return prepareGuestBirthday();
+            }
+        }
+
+    }
+
+
+    private String prepareGuestLastName() {
+        while (true) {
+            System.out.println("Please input customer`s last name (only letters are allowed) or 0 to go back to the main menu");
+            String lName = ConsoleInput.getUserInputString();
+            if (lName.equals("0")) {
+                return null;
+            } else if (lName.matches("^[a-zA-Z]+$")) {
+                return lName;
+            } else {
+                System.out.println("Incorrect input");
+            }
+
+        }
+    }
+
+    private String prepareGuestFirstName() {
+        while (true) {
+            System.out.println("Please input customer`s first name (only letters are allowed) or 0 to go back to the main menu");
+            String fName = ConsoleInput.getUserInputString();
+            if (fName.equals("0")) {
+                return null;
+            } else if (fName.matches("^[a-zA-Z]+$")) {
+                return fName;
+            } else {
+                System.out.println("Incorrect input");
+            }
+        }
+
 
     }
 
@@ -77,29 +177,9 @@ public class RegisterConsoleController {
         }
     }
 
-    private Guest prepareGuest() {
-        //form
-        //todo not yet implemented
-prepareGuestBirthday();
-        return new Guest(null, "", "");
-    }
 
-    private LocalDate prepareGuestBirthday() {
-        System.out.println("Please input your guests date of birth in a dd.mm.yyyy format or 0 to go back to the prev menu");
-        LocalDate birthday = ConsoleInput.getUserInputDate();
-        return birthday;
-    }
-    private String prepareGuestLastName(){
-        String lName;
-        return lName;
-    }
-
-    private String prepareGuestFirstName(){
-        String fName;
-        return fName;
-    }
     void unregister() {
-        System.out.println(MESSAGE_REGISTER);
+        System.out.println(MESSAGE_UNREGISTER);
         try {
             Integer roomNumber = getRoomNr();
             if (roomNumber == null) return;

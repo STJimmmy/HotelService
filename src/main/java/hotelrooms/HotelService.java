@@ -22,6 +22,14 @@ public class HotelService {
         if (!room.isVacant()) {
             throw new HotelServiceException("This room already has tenants, please choose another one");
         }
+        System.out.println(guests);
+        for (Guest guest : guests) {
+            System.out.println(guest.getDateOfBirth());
+            System.out.println(guest.getlName());
+            System.out.println(guest.getfName());
+        }
+
+
 
         guests.stream()
                 .filter(guest -> guest.getAge() >= 18)
@@ -29,6 +37,7 @@ public class HotelService {
                 .orElseThrow(() -> new HotelServiceException("There is no adult person in guests list"));
 
         room.setVacant(false);
+        room.setIsClean(false);
     }
 
     public void unregister(int roomNr) {
@@ -56,6 +65,9 @@ public class HotelService {
 
     public void validateRoomNumber(int roomNumber) {
         hotel.selectRoom(roomNumber); //will throw exception if not valid
+    }
+    public int getRoomCapacity(int roomNumber){
+        return hotel.selectRoom(roomNumber).getCapacity();
     }
 }
 

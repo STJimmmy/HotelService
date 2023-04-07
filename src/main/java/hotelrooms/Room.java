@@ -11,14 +11,16 @@ public class Room {
     private boolean isThereBathRoom;
     private boolean vacant;
 
+    private boolean isClean;
     private List<Guest> guests;
 
-    public Room(int roomNo, int capacity, boolean isThereBathRoom, boolean vacant, List<Guest> guests) {
+    public Room(int roomNo, int capacity, boolean isThereBathRoom, boolean vacant, List<Guest> guests, boolean isClean) {
         this.roomNo = roomNo;
         this.capacity = capacity;
         this.isThereBathRoom = isThereBathRoom;
         this.vacant = vacant;
         this.guests = guests;
+        this.isClean = isClean;
     }
 
     public void setVacant(boolean vacant) {
@@ -65,8 +67,12 @@ public class Room {
     public boolean isVacant() {
         return vacant;
     }
-
+public boolean isClean(){return isClean;}
     public void setGuests(List<Guest> guests) {
         this.guests = guests;
     }
+
+    public void setIsClean (boolean clean) { isClean = clean;}
+
+
 }

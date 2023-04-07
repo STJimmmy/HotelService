@@ -1,11 +1,12 @@
 package usermenu;
 
+import guest.Guest;
 import hotelrooms.HotelService;
 import hotelrooms.Room;
 
 public class UserConsoleController {
 
-   private static final String USERMENUMESSAGE = """
+    private static final String USERMENUMESSAGE = """
             Choose one of the options:
             1. Show all rooms.
             2. Show all available rooms.
@@ -51,7 +52,6 @@ public class UserConsoleController {
     }
 
 
-
     private void processUserSelection(int userInput) {
         switch (userInput) {
             case 1:
@@ -61,17 +61,22 @@ public class UserConsoleController {
                 displayVacantRooms();
                 break;
             case 3:
-               registerController.register();
+                registerController.register();
                 break;
             case 4:
                 registerController.unregister();
                 break;
             case 5:
-              //  terminateProgram();
+                terminateProgram();
                 break;
             default:
                 System.out.println(INPUTERRORMESSAGE);
         }
+    }
+
+    void terminateProgram() {
+        isRunning = false;
+        System.out.println("Program has ended");
     }
 
     private void displayAllRooms() {
@@ -92,10 +97,15 @@ public class UserConsoleController {
     }
 
     private String getRoomInfo(Room room) {
-      return   "Room Number: " + room.getRoomNo() +
+        return "Room Number: " + room.getRoomNo() +
                 ", Capacity: " + room.getCapacity() +
                 ", BathRoom: " + booleanTranslate(room.isThereBathRoom()) +
-                ", Vacant: " + booleanTranslate(room.isVacant());
+                ", Vacant: " + booleanTranslate(room.isVacant())+
+                ", Clean: " + booleanTranslate(room.isClean());
+
+
+
+        }
     }
 
 
@@ -122,8 +132,5 @@ public class UserConsoleController {
 
 
 
-    void terminateProgram() {
-        isRunning = false;
-        System.out.println("Program has ended");
-    }*/
-}
+    */
+

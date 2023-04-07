@@ -9,6 +9,15 @@ public class Guest {
     private String lName;
     private LocalDate dateOfBirth;
 
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "fName='" + fName + '\'' +
+                ", lName='" + lName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                '}';
+    }
+
     public Guest(LocalDate dateOfBirth, String lName, String fName) {
         this.dateOfBirth = dateOfBirth;
         this.lName = lName;
